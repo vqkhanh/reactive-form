@@ -1,4 +1,4 @@
-import { FormArray, FormGroup, FormControl } from '@angular/forms';
+import { FormArray, FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -8,27 +8,36 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NewCourseFormComponent implements OnInit {
 
-  constructor() { }
+  
 
   ngOnInit(): void {
   }
 
   form = new FormGroup({
+    name: new FormControl('', Validators.required),
+    contact: new FormGroup({
+      email: new FormControl(),
+      phone: new FormControl()
+    }),
     topics: new FormArray([])
   });
 
-  addTopic(topic: HTMLInputElement){    
-    this.topics.push(new FormControl(topic.value));
+// same above
+  constructor(fb: FormBuilder) {
+    fb.group({
+      name:['', Validators.required],
+      contact: fb.group({
+        email: [],
+        phone: []
+      }),
+      topic: fb.array([])
+    }) 
+
   }
 
-  removeTopic(topic: FormControl){
-    let index = this.topics.controls.indexOf(topic);
-    this.topics.removeAt(index);
-  }
 
-  get topics() {
-    return this.form.get('topics') as FormArray;
-  }
+
+
 
 
 
